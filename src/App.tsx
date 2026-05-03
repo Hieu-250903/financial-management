@@ -12,6 +12,7 @@ import {
 import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
 import Analytics from './components/Analytics';
+import Goals from './components/Goals';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -97,6 +98,7 @@ function App() {
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'transactions' && <Transactions />}
         {activeTab === 'analytics' && <Analytics />}
+        {activeTab === 'goals' && <Goals />}
       </main>
     </div>
   );
