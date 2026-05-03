@@ -12,7 +12,8 @@ import {
   CreditCard, 
   DollarSign,
   Download,
-  Brain
+  Brain,
+  X
 } from 'lucide-react';
 
 // Giả lập dữ liệu giao dịch
@@ -28,6 +29,8 @@ const initialTransactions = [
 const Transactions: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterType, setFilterType] = useState('all'); // all, income, expense
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newTxType, setNewTxType] = useState('expense');
 
   const filteredTransactions = initialTransactions.filter(t => {
     const matchesSearch = t.title.toLowerCase().includes(searchTerm.toLowerCase()) || t.category.toLowerCase().includes(searchTerm.toLowerCase());
@@ -80,7 +83,9 @@ const Transactions: React.FC = () => {
               <Brain size={18} color="#ec4899" />
               <span>Auto-Categorize</span>
             </button>
-            <button style={{ background: 'var(--primary)', border: 'none', color: 'white', padding: '10px 15px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: '500' }}>
+            <button 
+              onClick={() => setIsModalOpen(true)}
+              style={{ background: 'var(--primary)', border: 'none', color: 'white', padding: '10px 15px', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '8px', cursor: 'pointer', fontWeight: '500' }}>
               <Plus size={18} />
               <span>Add New</span>
             </button>
@@ -200,6 +205,83 @@ const Transactions: React.FC = () => {
         </div>
       </div>
       
+      {/* Add New Transaction Modal */}
+      {isModalOpen && (
+        <div style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.7)', zIndex: 1000, display: 'flex', justifyContent: 'center', alignItems: 'center', backdropFilter: 'blur(5px)' }}>
+          <div className="glass-panel" style={{ width: '400px', maxWidth: '90%', padding: '25px', position: 'relative' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ margin: 0, fontSize: '20px' }}>Add Transaction</h3>
+              <button onClick={() => setIsModalOpen(false)} style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer' }}>
+                <X size={20} />
+              </button>
+            </div>
+            
+            <div style={{ display: 'flex', gap: '10px', marginBottom: '20px' }}>
+              <button 
+                onClick={() => setNewTxType('expense')}
+                style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid', borderColor: newTxType === 'expense' ? 'var(--danger)' : 'rgba(255,255,255,0.1)', background: newTxType === 'expense' ? 'rgba(239, 68, 68, 0.1)' : 'transparent', color: newTxType === 'expense' ? 'var(--danger)' : 'white', cursor: 'pointer', transition: 'all 0.2s', fontWeight: '500' }}>
+                Expense
+              </button>
+              <button 
+                onClick={() => setNewTxType('income')}
+                style={{ flex: 1, padding: '10px', borderRadius: '8px', border: '1px solid', borderColor: newTxType === 'income' ? 'var(--success)' : 'rgba(255,255,255,0.1)', background: newTxType === 'income' ? 'rgba(34, 197, 94, 0.1)' : 'transparent', color: newTxType === 'income' ? 'var(--success)' : 'white', cursor: 'pointer', transition: 'all 0.2s', fontWeight: '500' }}>
+                Income
+              </button>
+            </div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '15px' }}>
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Amount</label>
+                <div style={{ position: 'relative' }}>
+                  <span style={{ position: 'absolute', left: '15px', top: '50%', transform: 'translateY(-50%)', color: 'white', fontSize: '18px' }}>$</span>
+                  <input type="number" placeholder="0.00" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 15px 12px 35px', borderRadius: '8px', color: 'white', outline: 'none', fontSize: '20px', fontWeight: 'bold' }} />
+                </div>
+              </div>
+
+              <div>
+                <label style={{ display: 'block', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Title</label>
+                <input type="text" placeholder="e.g. Starbucks Coffee" style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 15px', borderRadius: '8px', color: 'white', outline: 'none' }} />
+              </div>
+
+              <div style={{ display: 'flex', gap: '15px' }}>
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: 'block', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Category</label>
+                  <select style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '12px 15px', borderRadius: '8px', color: 'white', outline: 'none' }}>
+                    {newTxType === 'expense' ? (
+                      <>
+                        <option style={{ background: 'var(--bg-dark)' }}>Food & Drinks</option>
+                        <option style={{ background: 'var(--bg-dark)' }}>Shopping</option>
+                        <option style={{ background: 'var(--bg-dark)' }}>Utilities</option>
+                        <option style={{ background: 'var(--bg-dark)' }}>Entertainment</option>
+                      </>
+                    ) : (
+                      <>
+                        <option style={{ background: 'var(--bg-dark)' }}>Salary</option>
+                        <option style={{ background: 'var(--bg-dark)' }}>Freelance</option>
+                        <option style={{ background: 'var(--bg-dark)' }}>Investment</option>
+                      </>
+                    )}
+                  </select>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={{ display: 'block', fontSize: '13px', color: 'var(--text-secondary)', marginBottom: '5px' }}>Date</label>
+                  <input type="date" defaultValue={new Date().toISOString().split('T')[0]} style={{ width: '100%', background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.1)', padding: '11px 15px', borderRadius: '8px', color: 'white', outline: 'none' }} />
+                </div>
+              </div>
+
+              <button 
+                onClick={() => setIsModalOpen(false)}
+                style={{ width: '100%', background: 'var(--primary)', border: 'none', color: 'white', padding: '15px', borderRadius: '8px', fontWeight: 'bold', marginTop: '10px', cursor: 'pointer', transition: 'opacity 0.2s' }}
+                onMouseOver={(e) => e.currentTarget.style.opacity = '0.9'}
+                onMouseOut={(e) => e.currentTarget.style.opacity = '1'}
+              >
+                Save Transaction
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* CSS Styles to inject locally for hover effects if not present in main css */}
       <style>{`
         .table-row-hover:hover {
