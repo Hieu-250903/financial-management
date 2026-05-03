@@ -11,6 +11,7 @@ import {
 } from 'lucide-react';
 import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
+import Analytics from './components/Analytics';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -95,6 +96,7 @@ function App() {
 
         {activeTab === 'dashboard' && <Dashboard />}
         {activeTab === 'transactions' && <Transactions />}
+        {activeTab === 'analytics' && <Analytics />}
       </main>
     </div>
   );
