@@ -13,9 +13,15 @@ import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
 import Analytics from './components/Analytics';
 import Goals from './components/Goals';
+import Auth from './components/Auth';
 
 function App() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [activeTab, setActiveTab] = useState('dashboard');
+
+  if (!isAuthenticated) {
+    return <Auth onLogin={() => setIsAuthenticated(true)} />;
+  }
 
   return (
     <div className="app-container">
@@ -50,7 +56,7 @@ function App() {
             <Settings size={20} />
             <span>Settings</span>
           </a>
-          <a className="nav-link" style={{ color: 'var(--danger)' }}>
+          <a className="nav-link" style={{ color: 'var(--danger)', cursor: 'pointer' }} onClick={() => setIsAuthenticated(false)}>
             <LogOut size={20} />
             <span>Logout</span>
           </a>
