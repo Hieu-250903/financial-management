@@ -10,6 +10,7 @@ import {
   Search
 } from 'lucide-react';
 import Dashboard from './components/Dashboard';
+import Transactions from './components/Transactions';
 
 function App() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -93,6 +94,7 @@ function App() {
         </header>
 
         {activeTab === 'dashboard' && <Dashboard />}
+        {activeTab === 'transactions' && <Transactions />}
       </main>
     </div>
   );
