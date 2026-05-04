@@ -13,6 +13,7 @@ import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
 import Analytics from './components/Analytics';
 import Goals from './components/Goals';
+import SettingsPage from './components/Settings';
 import Auth from './components/Auth';
 
 function App() {
@@ -52,7 +53,7 @@ function App() {
         </nav>
 
         <div style={{ marginTop: 'auto' }} className="nav-links">
-          <a className="nav-link">
+          <a className={`nav-link ${activeTab === 'settings' ? 'active' : ''}`} onClick={() => setActiveTab('settings')}>
             <Settings size={20} />
             <span>Settings</span>
           </a>
@@ -67,8 +68,8 @@ function App() {
       <main className="main-content">
         <header className="header">
           <div>
-            <h1>Overview</h1>
-            <p className="subtitle">Welcome back, let's check your finances.</p>
+            <h1>{activeTab === 'settings' ? 'Settings' : activeTab === 'transactions' ? 'Transactions' : activeTab === 'analytics' ? 'Analytics' : activeTab === 'goals' ? 'Goals & Limits' : 'Overview'}</h1>
+            <p className="subtitle">{activeTab === 'settings' ? 'Manage your preferences and account.' : 'Welcome back, let\'s check your finances.'}</p>
           </div>
           
           <div style={{ display: 'flex', gap: '20px', alignItems: 'center' }}>
@@ -102,6 +103,7 @@ function App() {
         {activeTab === 'transactions' && <Transactions />}
         {activeTab === 'analytics' && <Analytics />}
         {activeTab === 'goals' && <Goals />}
+        {activeTab === 'settings' && <SettingsPage />}
       </main>
     </div>
   );
