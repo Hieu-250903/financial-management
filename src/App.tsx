@@ -6,9 +6,9 @@ import {
   Target, 
   Settings, 
   LogOut,
-  Bell,
   Search
 } from 'lucide-react';
+import NotificationPanel from './components/NotificationPanel';
 import Dashboard from './components/Dashboard';
 import Transactions from './components/Transactions';
 import Analytics from './components/Analytics';
@@ -89,10 +89,7 @@ function App() {
               />
             </div>
             
-            <button style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', position: 'relative' }}>
-              <Bell size={24} />
-              <span style={{ position: 'absolute', top: 0, right: 0, width: '10px', height: '10px', background: 'var(--danger)', borderRadius: '50%', border: '2px solid var(--bg-dark)' }}></span>
-            </button>
+            <NotificationPanel onNavigate={(tab) => setActiveTab(tab)} />
 
             <div className="user-profile">
               <div className="avatar">JD</div>
