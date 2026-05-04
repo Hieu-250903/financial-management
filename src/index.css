@@ -1750,3 +1750,109 @@ button {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
+/* ===== Cool-off Extras ===== */
+.cooloff-add-btn {
+  width: 100%;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px dashed rgba(255, 255, 255, 0.2);
+  color: var(--text-secondary);
+  border-radius: 12px;
+  margin-top: 10px;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 14px;
+  transition: var(--transition);
+}
+
+.cooloff-add-btn:hover {
+  border-color: var(--warning);
+  color: white;
+  background: rgba(245, 158, 11, 0.05);
+}
+
+.cooloff-period-options {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+.cooloff-period-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 14px 8px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: var(--transition);
+  color: var(--text-secondary);
+}
+
+.cooloff-period-btn:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  color: white;
+}
+
+.cooloff-period-btn.active {
+  border-color: var(--warning);
+  background: rgba(245, 158, 11, 0.1);
+  color: var(--warning);
+}
+
+.cooloff-period-value {
+  font-size: 18px;
+  font-weight: 700;
+}
+
+.cooloff-period-label {
+  font-size: 11px;
+}
+
+.cooloff-textarea {
+  resize: vertical;
+  min-height: 56px;
+  line-height: 1.5;
+}
+
+.cooloff-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 20px;
+  text-align: center;
+}
+
+.cooloff-empty p {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.cooloff-saved-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 500;
+  z-index: 2000;
+  box-shadow: 0 8px 30px rgba(16, 185, 129, 0.35);
+  animation: toastIn 0.3s ease;
+}
+
+.cooloff-item-animate {
+  animation: cooloffSlideIn 0.35s ease;
+}
+
+@keyframes cooloffSlideIn {
+  from { opacity: 0; transform: translateX(-15px); }
+  to { opacity: 1; transform: translateX(0); }
+}

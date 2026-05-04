@@ -24,7 +24,8 @@ import {
   Utensils,
   Fuel,
   Wifi,
-  Zap
+  Zap,
+  type LucideIcon
 } from 'lucide-react';
 
 // ---- Types ----
@@ -48,47 +49,49 @@ interface LimitItem {
   iconName: string;
 }
 
-// ---- Icon Registry ----
-const goalIcons: Record<string, { icon: React.ReactNode; label: string }> = {
-  PiggyBank: { icon: <PiggyBank size={24} />, label: 'Savings' },
-  Laptop: { icon: <Laptop size={24} />, label: 'Tech' },
-  Plane: { icon: <Plane size={24} />, label: 'Travel' },
-  Car: { icon: <Car size={24} />, label: 'Car' },
-  Home: { icon: <Home size={24} />, label: 'Home' },
-  Smartphone: { icon: <Smartphone size={24} />, label: 'Phone' },
-  GraduationCap: { icon: <GraduationCap size={24} />, label: 'Education' },
-  Heart: { icon: <Heart size={24} />, label: 'Health' },
-  Gem: { icon: <Gem size={24} />, label: 'Luxury' },
-  Gift: { icon: <Gift size={24} />, label: 'Gift' },
-  Music: { icon: <Music size={24} />, label: 'Music' },
-  Dumbbell: { icon: <Dumbbell size={24} />, label: 'Fitness' },
+// ---- Icon Registry (using component references instead of instances) ----
+const goalIcons: Record<string, { Icon: LucideIcon; label: string }> = {
+  PiggyBank: { Icon: PiggyBank, label: 'Savings' },
+  Laptop: { Icon: Laptop, label: 'Tech' },
+  Plane: { Icon: Plane, label: 'Travel' },
+  Car: { Icon: Car, label: 'Car' },
+  Home: { Icon: Home, label: 'Home' },
+  Smartphone: { Icon: Smartphone, label: 'Phone' },
+  GraduationCap: { Icon: GraduationCap, label: 'Education' },
+  Heart: { Icon: Heart, label: 'Health' },
+  Gem: { Icon: Gem, label: 'Luxury' },
+  Gift: { Icon: Gift, label: 'Gift' },
+  Music: { Icon: Music, label: 'Music' },
+  Dumbbell: { Icon: Dumbbell, label: 'Fitness' },
 };
 
-const limitIcons: Record<string, { icon: React.ReactNode; label: string }> = {
-  Coffee: { icon: <Coffee size={18} />, label: 'Food' },
-  ShoppingBag: { icon: <ShoppingBag size={18} />, label: 'Shopping' },
-  Gamepad2: { icon: <Gamepad2 size={18} />, label: 'Entertainment' },
-  Car: { icon: <Car size={18} />, label: 'Transport' },
-  Utensils: { icon: <Utensils size={18} />, label: 'Dining' },
-  Fuel: { icon: <Fuel size={18} />, label: 'Fuel' },
-  Wifi: { icon: <Wifi size={18} />, label: 'Internet' },
-  Zap: { icon: <Zap size={18} />, label: 'Utilities' },
-  Heart: { icon: <Heart size={18} />, label: 'Health' },
-  GraduationCap: { icon: <GraduationCap size={18} />, label: 'Education' },
+const limitIcons: Record<string, { Icon: LucideIcon; label: string }> = {
+  Coffee: { Icon: Coffee, label: 'Food' },
+  ShoppingBag: { Icon: ShoppingBag, label: 'Shopping' },
+  Gamepad2: { Icon: Gamepad2, label: 'Entertainment' },
+  Car: { Icon: Car, label: 'Transport' },
+  Utensils: { Icon: Utensils, label: 'Dining' },
+  Fuel: { Icon: Fuel, label: 'Fuel' },
+  Wifi: { Icon: Wifi, label: 'Internet' },
+  Zap: { Icon: Zap, label: 'Utilities' },
+  Heart: { Icon: Heart, label: 'Health' },
+  GraduationCap: { Icon: GraduationCap, label: 'Education' },
 };
 
 const goalColors = ['#10b981', '#8b5cf6', '#ec4899', '#f59e0b', '#06b6d4', '#3b82f6', '#ef4444', '#f97316'];
 
-const renderGoalIcon = (iconName: string, color: string, size: number = 24) => {
+const GoalIcon = ({ iconName, color, size = 24 }: { iconName: string; color: string; size?: number }) => {
   const entry = goalIcons[iconName];
   if (!entry) return <Target size={size} color={color} />;
-  return React.cloneElement(entry.icon as React.ReactElement, { color, size });
+  const { Icon } = entry;
+  return <Icon size={size} color={color} />;
 };
 
-const renderLimitIcon = (iconName: string, size: number = 18) => {
+const LimitIcon = ({ iconName, size = 18, color }: { iconName: string; size?: number; color?: string }) => {
   const entry = limitIcons[iconName];
-  if (!entry) return <Coffee size={size} />;
-  return React.cloneElement(entry.icon as React.ReactElement, { size });
+  if (!entry) return <Coffee size={size} color={color} />;
+  const { Icon } = entry;
+  return <Icon size={size} color={color} />;
 };
 
 // ---- Initial Data ----
@@ -115,7 +118,7 @@ const Goals: React.FC = () => {
   // New Goal form state
   const [goalForm, setGoalForm] = useState({
     title: '', target: '', saved: '0', date: '',
-    iconName: 'PiggyBank', color: '#10b981', priority: 'medium' as const, monthlyAutoSave: ''
+    iconName: 'PiggyBank', color: '#10b981', priority: 'medium' as 'high' | 'medium' | 'low', monthlyAutoSave: ''
   });
 
   // New Limit form state
@@ -202,7 +205,7 @@ const Goals: React.FC = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '8px', alignItems: 'center' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                       <div style={{ background: 'rgba(255,255,255,0.05)', padding: '8px', borderRadius: '8px', display: 'flex' }}>
-                        {renderLimitIcon(limit.iconName)}
+                        <LimitIcon iconName={limit.iconName} />
                       </div>
                       <span style={{ fontWeight: '500' }}>{limit.category}</span>
                     </div>
@@ -230,7 +233,7 @@ const Goals: React.FC = () => {
               );
             })}
             
-            <button onClick={() => setShowLimitModal(true)} className="btn-hover-border" style={{ background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)', color: 'var(--text-secondary)', padding: '12px', borderRadius: '10px', marginTop: '10px', cursor: 'pointer', transition: 'all 0.2s' }}>
+            <button onClick={() => setShowLimitModal(true)} className="btn-hover-border" style={{ background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)', color: 'var(--text-secondary)', padding: '12px', borderRadius: '10px', marginTop: '10px', cursor: 'pointer', transition: 'all 0.2s', fontFamily: 'inherit' }}>
               + Set limit for another category
             </button>
           </div>
@@ -252,7 +255,7 @@ const Goals: React.FC = () => {
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
                     <div style={{ display: 'flex', gap: '15px' }}>
                       <div style={{ background: `${goal.color}20`, padding: '12px', borderRadius: '12px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                        {renderGoalIcon(goal.iconName, goal.color)}
+                        <GoalIcon iconName={goal.iconName} color={goal.color} />
                       </div>
                       <div>
                         <h4 style={{ margin: '0 0 5px 0', fontSize: '16px' }}>{goal.title}</h4>
@@ -373,13 +376,16 @@ const Goals: React.FC = () => {
               <div className="modal-field">
                 <label>Choose Icon</label>
                 <div className="icon-picker-grid">
-                  {Object.entries(goalIcons).map(([key, val]) => (
-                    <button key={key} className={`icon-pick-btn ${goalForm.iconName === key ? 'active' : ''}`} onClick={() => setGoalForm({...goalForm, iconName: key})} title={val.label}
-                      style={goalForm.iconName === key ? { borderColor: goalForm.color, background: `${goalForm.color}15` } : {}}>
-                      {React.cloneElement(val.icon as React.ReactElement, { color: goalForm.iconName === key ? goalForm.color : 'var(--text-secondary)' })}
-                      <span className="icon-pick-label">{val.label}</span>
-                    </button>
-                  ))}
+                  {Object.entries(goalIcons).map(([key, val]) => {
+                    const isSelected = goalForm.iconName === key;
+                    return (
+                      <button key={key} className={`icon-pick-btn ${isSelected ? 'active' : ''}`} onClick={() => setGoalForm({...goalForm, iconName: key})} title={val.label}
+                        style={isSelected ? { borderColor: goalForm.color, background: `${goalForm.color}15` } : {}}>
+                        <val.Icon size={24} color={isSelected ? goalForm.color : 'var(--text-secondary)'} />
+                        <span className="icon-pick-label">{val.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
 
@@ -402,7 +408,7 @@ const Goals: React.FC = () => {
                 <span className="modal-preview-label">Preview</span>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div style={{ background: `${goalForm.color}20`, padding: '10px', borderRadius: '10px', display: 'flex' }}>
-                    {renderGoalIcon(goalForm.iconName, goalForm.color, 20)}
+                    <GoalIcon iconName={goalForm.iconName} color={goalForm.color} size={20} />
                   </div>
                   <div>
                     <strong>{goalForm.title}</strong>
@@ -454,12 +460,15 @@ const Goals: React.FC = () => {
               <div className="modal-field">
                 <label>Choose Icon</label>
                 <div className="icon-picker-grid compact">
-                  {Object.entries(limitIcons).map(([key, val]) => (
-                    <button key={key} className={`icon-pick-btn ${limitForm.iconName === key ? 'active' : ''}`} onClick={() => setLimitForm({...limitForm, iconName: key})} title={val.label}>
-                      {React.cloneElement(val.icon as React.ReactElement, { color: limitForm.iconName === key ? 'var(--primary)' : 'var(--text-secondary)' })}
-                      <span className="icon-pick-label">{val.label}</span>
-                    </button>
-                  ))}
+                  {Object.entries(limitIcons).map(([key, val]) => {
+                    const isSelected = limitForm.iconName === key;
+                    return (
+                      <button key={key} className={`icon-pick-btn ${isSelected ? 'active' : ''}`} onClick={() => setLimitForm({...limitForm, iconName: key})} title={val.label}>
+                        <val.Icon size={18} color={isSelected ? 'var(--primary)' : 'var(--text-secondary)'} />
+                        <span className="icon-pick-label">{val.label}</span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             </div>
