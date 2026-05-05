@@ -1,5 +1,7 @@
-Project Name : Financial Management 
+Project Name : Financial Management
+
 Product Name : LuminaMoney
+
 Author : Nguyễn Minh Hiếu
 Version : 0.0.1
 Created : 2026-05-04
