@@ -1,30 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { ShieldAlert, Check, X, Clock, Link, StickyNote, Plus } from 'lucide-react';
 
-interface CoolOffItem {
-  id: string;
-  name: string;
-  price: number;
-  addedAt: number;
-  coolOffHours: number;
-  link?: string;
-  note?: string;
-}
-
-const initialItems: CoolOffItem[] = [
-  { id: '1', name: 'PlayStation 5 Pro', price: 699, addedAt: Date.now() - 1000 * 60 * 60 * 20, coolOffHours: 24 },
-  { id: '2', name: 'Designer Jacket', price: 250, addedAt: Date.now() - 1000 * 60 * 60 * 2, coolOffHours: 48 },
-];
-
-const coolOffOptions = [
-  { label: '12h', value: 12 },
-  { label: '24h', value: 24 },
-  { label: '48h', value: 48 },
-  { label: '72h', value: 72 },
-];
+import type { CoolOffItem } from '../types/cooloff';
+import { coolOffOptions } from '../constants/cooloff';
+import { mockCoolOffItems } from '../data/mockCoolOff';
 
 const CoolOffPurchases: React.FC = () => {
-  const [items, setItems] = useState<CoolOffItem[]>(initialItems);
+  const [items, setItems] = useState<CoolOffItem[]>(mockCoolOffItems);
   const [now, setNow] = useState(Date.now());
   const [showModal, setShowModal] = useState(false);
   const [savedAmount, setSavedAmount] = useState<number | null>(null);

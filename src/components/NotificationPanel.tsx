@@ -3,172 +3,12 @@ import {
   Bell, 
   X, 
   CheckCheck, 
-  AlertTriangle, 
-  CalendarDays, 
-  ShieldCheck, 
-  Target, 
-  Brain, 
-  CreditCard,
-  TrendingDown,
-  PartyPopper,
-  Zap,
   Check
 } from 'lucide-react';
 
-export type NotificationType = 
-  | 'budget_warning' 
-  | 'subscription' 
-  | 'cooloff_ready' 
-  | 'cooloff_saved' 
-  | 'goal_progress' 
-  | 'goal_milestone'
-  | 'ai_insight' 
-  | 'transaction_alert';
-
-export interface Notification {
-  id: string;
-  type: NotificationType;
-  title: string;
-  message: string;
-  timestamp: number;
-  read: boolean;
-  navigateTo?: string; // tab name to navigate to
-}
-
-const getNotificationMeta = (type: NotificationType) => {
-  switch (type) {
-    case 'budget_warning':
-      return { icon: <AlertTriangle size={18} />, color: '#f59e0b', bgColor: 'rgba(245, 158, 11, 0.15)' };
-    case 'subscription':
-      return { icon: <CalendarDays size={18} />, color: '#6366f1', bgColor: 'rgba(99, 102, 241, 0.15)' };
-    case 'cooloff_ready':
-      return { icon: <ShieldCheck size={18} />, color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.15)' };
-    case 'cooloff_saved':
-      return { icon: <PartyPopper size={18} />, color: '#ec4899', bgColor: 'rgba(236, 72, 153, 0.15)' };
-    case 'goal_progress':
-      return { icon: <Target size={18} />, color: '#8b5cf6', bgColor: 'rgba(139, 92, 246, 0.15)' };
-    case 'goal_milestone':
-      return { icon: <Zap size={18} />, color: '#10b981', bgColor: 'rgba(16, 185, 129, 0.15)' };
-    case 'ai_insight':
-      return { icon: <Brain size={18} />, color: '#6366f1', bgColor: 'rgba(99, 102, 241, 0.15)' };
-    case 'transaction_alert':
-      return { icon: <CreditCard size={18} />, color: '#ef4444', bgColor: 'rgba(239, 68, 68, 0.15)' };
-    default:
-      return { icon: <Bell size={18} />, color: '#94a3b8', bgColor: 'rgba(148, 163, 184, 0.15)' };
-  }
-};
-
-const formatTimeAgo = (timestamp: number): string => {
-  const now = Date.now();
-  const diffMs = now - timestamp;
-  const diffMinutes = Math.floor(diffMs / (1000 * 60));
-  const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
-  const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
-
-  if (diffMinutes < 1) return 'Just now';
-  if (diffMinutes < 60) return `${diffMinutes}m ago`;
-  if (diffHours < 24) return `${diffHours}h ago`;
-  if (diffDays === 1) return 'Yesterday';
-  if (diffDays < 7) return `${diffDays}d ago`;
-  return new Date(timestamp).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-};
-
-// Mock notifications data reflecting the app's features
-const generateMockNotifications = (): Notification[] => {
-  const now = Date.now();
-  return [
-    {
-      id: '1',
-      type: 'budget_warning',
-      title: 'Budget Alert',
-      message: 'Food & Drinks has used 90% of the budget ($450/$500). Slow down!',
-      timestamp: now - 1000 * 60 * 15, // 15 min ago
-      read: false,
-      navigateTo: 'goals'
-    },
-    {
-      id: '2',
-      type: 'subscription',
-      title: 'Upcoming Payment',
-      message: 'Netflix Premium ($19.99) will be charged in 3 days.',
-      timestamp: now - 1000 * 60 * 45, // 45 min ago
-      read: false,
-      navigateTo: 'dashboard'
-    },
-    {
-      id: '3',
-      type: 'cooloff_ready',
-      title: 'Cool-off Complete',
-      message: 'PlayStation 5 Pro cool-off timer ended. Do you still want to buy it?',
-      timestamp: now - 1000 * 60 * 60 * 2, // 2 hours ago
-      read: false,
-      navigateTo: 'dashboard'
-    },
-    {
-      id: '4',
-      type: 'ai_insight',
-      title: 'AI Insight',
-      message: 'Your spending this week is 15% below average. Great job keeping it low!',
-      timestamp: now - 1000 * 60 * 60 * 4, // 4 hours ago
-      read: false,
-      navigateTo: 'analytics'
-    },
-    {
-      id: '5',
-      type: 'goal_milestone',
-      title: 'Milestone Reached!',
-      message: 'Emergency Fund reached 70%! You\'re ahead of schedule by 2 months.',
-      timestamp: now - 1000 * 60 * 60 * 8, // 8 hours ago
-      read: true,
-      navigateTo: 'goals'
-    },
-    {
-      id: '6',
-      type: 'transaction_alert',
-      title: 'Large Transaction',
-      message: 'Unusual spending detected: -$699 at Apple Store. Was this you?',
-      timestamp: now - 1000 * 60 * 60 * 12, // 12 hours ago
-      read: true,
-      navigateTo: 'transactions'
-    },
-    {
-      id: '7',
-      type: 'subscription',
-      title: 'Low Usage Alert',
-      message: 'Gym Membership ($45/mo) has low usage. Consider canceling to save money.',
-      timestamp: now - 1000 * 60 * 60 * 24, // 1 day ago
-      read: true,
-      navigateTo: 'dashboard'
-    },
-    {
-      id: '8',
-      type: 'cooloff_saved',
-      title: 'Money Saved!',
-      message: 'You skipped Designer Jacket — you saved $250! 🎉',
-      timestamp: now - 1000 * 60 * 60 * 36, // 1.5 days ago
-      read: true,
-      navigateTo: 'dashboard'
-    },
-    {
-      id: '9',
-      type: 'budget_warning',
-      title: 'Budget Exceeded',
-      message: 'Shopping category has exceeded the monthly limit ($380/$400).',
-      timestamp: now - 1000 * 60 * 60 * 48, // 2 days ago
-      read: true,
-      navigateTo: 'goals'
-    },
-    {
-      id: '10',
-      type: 'ai_insight',
-      title: 'Monthly Summary',
-      message: 'At current pace, you may overspend by end of month. Consider cutting discretionary expenses.',
-      timestamp: now - 1000 * 60 * 60 * 72, // 3 days ago
-      read: true,
-      navigateTo: 'analytics'
-    }
-  ];
-};
+import type { NotificationItem } from '../types/notifications';
+import { getNotificationMeta, generateMockNotifications } from '../data/mockNotifications';
+import { formatTimeAgo } from '../utils/formatters';
 
 interface NotificationPanelProps {
   onNavigate?: (tab: string) => void;
@@ -176,7 +16,7 @@ interface NotificationPanelProps {
 
 const NotificationPanel: React.FC<NotificationPanelProps> = ({ onNavigate }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState<Notification[]>(generateMockNotifications);
+  const [notifications, setNotifications] = useState<NotificationItem[]>(generateMockNotifications);
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [closingId, setClosingId] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
@@ -217,7 +57,7 @@ const NotificationPanel: React.FC<NotificationPanelProps> = ({ onNavigate }) => 
     }, 300);
   };
 
-  const handleNotificationClick = (notification: Notification) => {
+  const handleNotificationClick = (notification: NotificationItem) => {
     markAsRead(notification.id);
     if (notification.navigateTo && onNavigate) {
       onNavigate(notification.navigateTo);
